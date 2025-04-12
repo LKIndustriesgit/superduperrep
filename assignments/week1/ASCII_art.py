@@ -1,0 +1,7 @@
+print("H         H      E E E E E E      L                L                  O O O O")
+print("H         H      E                L                L                O         O")
+print("H         H      E                L                L                O         O")
+print("H H H H H H      E E E E E E      L                L                O         O")
+print("H         H      E                L                L                O         O")
+print("H         H      E                L                L                O         O")
+print("H         H      E E E E E E      L L L L L L      L L L L L L        O O O O")
