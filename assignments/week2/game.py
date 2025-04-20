@@ -269,17 +269,19 @@ def social_3():
     story_text("You decide to eat out to disctract your mind", delay=0.05)
     story_text("A student has finite spending capabilities ", delay=0.05)
     story_text("How much money do you want to spend (In €)?", delay=0.05)
-    budget = input()
+    budget = int(input())
     if budget <= 0:
         story_text("Thats not how money works. Try a positive number.", delay=0.05)
         social_3()
     elif budget <= 6:
         story_text("You eat at the Leuphana mensa. its nothing special but its fun to meet other people", delay=0.05)
         social += 1
+        end()
     elif 6<= budget >=10:
         story_text("You eat at a fast food restaurant. Its unhealthy but really tasty!", delay=0.05)
         social += 1
         stress -= 1
+        end()
     elif 10<= budget >=20:
         story_text("You eat at a real restaurant.", delay=0.05)
         story_text(
@@ -287,6 +289,7 @@ def social_3():
             delay=0.05)
         social += 1
         stress += 1
+        end()
     elif budget <=20:
         story_text("Do you want to eat at a michelin restaurant? You dont have that kind of money!", delay=0.05)
         story_text("Try again with something more reasonable.", delay=0.05)
