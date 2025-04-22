@@ -348,8 +348,7 @@ def story_end():
     story_text("⭐️Do you want to try again?⭐️ (yes/no)", delay=0.05)
     choice = input("> ").strip().lower()
     if choice == "yes":
-        new_state = GameState()
-        start(new_state)
+        start()
     else:
         story_text("Thanks for playing!", delay=0.05)
         sys.exit()
