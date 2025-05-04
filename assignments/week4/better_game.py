@@ -1,21 +1,33 @@
-#This is a python code for a very simple choose your own adventure game
-#where you live your life as a digital media student
+# This is a python code for a very simple choose your own adventure game
+# where you live your life as a digital media student
 
-#imported libraries:
+# imported libraries:
 import timeit
 from colorama import init, Fore, Style
 import time
 import sys
 import random
 
-#global variables:
+# global variables:
 knowledge = 0
 stress = 0
 social = 0
 day = 1
+
+# constants:
+DEBUG = False
+
+
+# function for debug messages:
+def debug(message):
+    if DEBUG:
+        print(message)
+
+
 init(autoreset=True)
 
-#Def of main text format used:
+
+# Def of main text format used:
 def story_text(text, delay=0.05, color=Fore.BLUE, ):
     for char in text:
         sys.stdout.write(color + char)
@@ -23,7 +35,10 @@ def story_text(text, delay=0.05, color=Fore.BLUE, ):
         time.sleep(delay)
     print()
 
-#Game start text:
+
+# FOR GAME STRUCTURE SCROLL TO BOTTOM
+
+# Game start text:
 print("Welcome to: ")
 print(
     " ░▒▓███████▓▒░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░░▒▓████████▓▒░▒▓███████▓▒░▒▓████████▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░▒▓████████▓▒░▒▓████████▓▒░                                                                                                                                        ")
@@ -52,7 +67,8 @@ story_text(
     "\n MONDAY MORNING. You wake up. No lectures today. It is nice and calm outside. Birds are singing their songs, \n you feel like nothing in the world can stop you today",
     delay=0.05)
 
-#choice handle definition:
+
+# choice handle function:
 def handle_choice(choice, options):
     action = options.get(choice)
     if action:
@@ -62,13 +78,17 @@ def handle_choice(choice, options):
         return False
     return True
 
-#Definition for listing the main stats
+
+# Function for listing the main stats
 def stats():
+    debug("\n[showing stats]\n")
     global knowledge, stress, social, day
     story_text(f"knowledge=^ {knowledge} stress = {stress} social = {social}", delay=0.05)
 
-#Definition for starting decision
+
+# Function for starting decision
 def start():
+    debug("\n[initialising game]\n")
     story_text("\n But how are you going to spend your day? \n 1) Study for the test \n 2) Do something social instead",
                delay=0.05)
     options = {
@@ -78,8 +98,10 @@ def start():
     while not handle_choice(input("> "), options):
         pass
 
-#Definition for first choice, studying for the test
+
+# Function for first choice, studying for the test
 def study_test():
+    debug("\n[study_test]\n")
     global knowledge, stress, social, day
     if day <= 2:
         story_text("You decided to study. Good choice. After all, you want to get a degree. ", delay=0.05)
@@ -107,10 +129,11 @@ def study_test():
                 "As you have already studied a lot, you can just take one last look at everything and then call it a day",
                 delay=0.05)
             knowledge += 1
-            end()
 
-#definition if you decide to do something social on first day
+
+# function if you decide to do something social on first day
 def social_1():
+    debug("\n[social_1]\n")
     story_text("Studying is for losers. Lets do something fun instead. But what?", delay=0.05)
     story_text("Will you 1) go to a party or 2) do sports?", delay=0.05)
     options = {
@@ -120,8 +143,10 @@ def social_1():
     while not handle_choice(input("> "), options):
         pass
 
-#definition if you chose to do sports
+
+# function if you chose to do sports
 def sports():
+    debug("\n[sports]\n")
     global knowledge, stress, social, day
     story_text("Which sport are you going to try?", delay=0.05)
     type_sport = input()
@@ -142,29 +167,32 @@ def sports():
                    delay=0.05)
         story_text(f"You are not got at sports!", delay=0.05)
         social -= 1
-        #next_day()
 
-#definition if you join team
+
+# function if you join team
 def join_team():
+    debug("\n[join_team]\n")
     global knowledge, stress, social, day
     story_text(f"You join the sports team. This is gonna take up a lot of your spare time, but you're GOOD.",
                delay=0.05)
     social += 2
     stress += 1
     stats()
-    #next_day()
 
-#function if you dont join the team
+
+# function if you dont join the team
 def dont_team():
+    debug("\n[dont_team]\n")
     global knowledge, stress, social, day
     story_text(f"You dont join the team but the question itself was good enough to boost your ego and social standing.",
                delay=0.05)
     social += 1
     stats()
-    #next_day()
 
-#function if you decide to go to a party
+
+# function if you decide to go to a party
 def party():
+    debug("\n[party]\n")
     global knowledge, stress, social, day
     social += 1
     story_text("Yeah! Lets go to a party.", delay=0.05)
@@ -183,10 +211,11 @@ def party():
         story_text("The party is kind of lame. You go home early. At least you went to a party", delay=0.05)
         stress -= 1
         stats()
-        #next_day()
 
 
+# function if you decide to flirt with person
 def flirt():
+    debug("\n[flirt]\n")
     global knowledge, stress, social, day
     story_text("What are you going to say to them", delay=0.05)
     line = input()
@@ -204,20 +233,22 @@ def flirt():
         social -= 1
         stress += 1
         stats()
-        #next_day()
 
 
+# function if you decide against flirting
 def afraid():
+    debug("\n[afraid]\n")
     global knowledge, stress, social, day
     story_text("You spend the rest of the evening awkwardly standing a few meters away from the attractive person",
                delay=0.05)
     story_text("On the way back home you are very angry at yourself for not managing to approach them", delay=0.05)
     stress += 1
     stats()
-    #next_day()
 
 
+# function completing the actual action of studying
 def studying():
+    debug("\n[studying]\n")
     global knowledge, stress, social, day
     story_text("What topic are you going to study for? ", delay=0.05)
     topic = input()
@@ -233,13 +264,11 @@ def studying():
         story_text("Hours pass and you look out of the window. Its getting dark.", delay=0.05)
         story_text("You realise that you didn't remember anything you just studied", delay=0.05)
     stats()
-    if day == 1:
-        next_day()
-    elif day == 2:
-        third_day()
 
 
+# NEXT DAY STARTS
 def next_day():
+    debug("\n[next_day]\n")
     global knowledge, stress, social, day
     day += 1
     story_text("[...]", delay=0.05)
@@ -255,7 +284,9 @@ def next_day():
         pass
 
 
+# Social choices on second day function:
 def social_2():
+    debug("\n[social_2]\n")
     story_text("You find a handout advertising for the formation of a local band. Being in a band sounds cool,",
                delay=0.05)
     story_text("maybe YOU could do that.", delay=0.05)
@@ -273,7 +304,9 @@ def social_2():
         pass
 
 
+# If you decided to play guitar
 def guitar():
+    debug("\n[guitar]\n")
     global knowledge, stress, social, day, band_name
     story_text("So you decided to play guitar. You look so cool!", delay=0.05)
     social += 1
@@ -283,11 +316,11 @@ def guitar():
         story_text("Soon enough they got very famous and lived happyly ever after while touring the world", delay=0.05)
         story_text("You WIN!", delay=0.05)
         story_end()
-    else:
-        third_day()
 
 
+# If you decided to play drums
 def drums():
+    debug("\n[drums]\n")
     global knowledge, stress, social, day, band_name
     story_text("So you decided to play drums. Thats good for releasing stress!", delay=0.05)
     stress -= 1
@@ -297,11 +330,11 @@ def drums():
         story_text("Soon enough they got very famous and lived happyly ever after while touring the world", delay=0.05)
         story_text("You WIN!", delay=0.05)
         story_end()
-    else:
-        third_day()
 
 
+# THIRD DAY STARTS
 def third_day():
+    debug("\n[third_day]\n")
     global knowledge, stress, social, day
     day += 1
     story_text("[...]", delay=0.05)
@@ -319,7 +352,9 @@ def third_day():
         pass
 
 
+# Social activity choices on third day:
 def social_3():
+    debug("\n[social_3]\n")
     global knowledge, stress, social, day
     if knowledge < 2:
         stress += 1
@@ -333,12 +368,10 @@ def social_3():
     elif budget <= 6:
         story_text("You eat at the Leuphana mensa. its nothing special but its fun to meet other people", delay=0.05)
         social += 1
-        end()
     elif 6 <= budget >= 10:
         story_text("You eat at a fast food restaurant. Its unhealthy but really tasty!", delay=0.05)
         social += 1
         stress -= 1
-        end()
     elif 10 <= budget >= 20:
         story_text("You eat at a real restaurant.", delay=0.05)
         story_text(
@@ -346,33 +379,36 @@ def social_3():
             delay=0.05)
         social += 1
         stress += 1
-        end()
     elif budget <= 20:
         story_text("Do you want to eat at a michelin restaurant? You dont have that kind of money!", delay=0.05)
         story_text("Try again with something more reasonable.", delay=0.05)
         social_3()
 
 
+# Function if you decide to do an all nighter:
 def all_nighter():
+    debug("\n[all_nighter]\n")
     global knowledge, stress, social, day
     story_text("The hours pass and pass and pass and you work and work and work.", delay=0.05)
     story_text("As the dawn breaks, you swear to yourself that you will never do this again", delay=0.05)
     stress += 2
     knowledge += 2
     stats()
-    end()
 
 
+# Function if you decide against doing an all nighter:
 def no_nighter():
+    debug("\n[no_nighter]\n")
     global knowledge, stress, social, day
     story_text("Trying to learn everything in one night just stresses you out and achieves nothing.", delay=0.05)
     story_text("You will just take a short look at everything and hope for the best.", delay=0.05)
     knowledge += 1
     stats()
-    end()
 
 
+# Function for test at the end of game:
 def end():
+    debug("\n[end]\n")
     global knowledge, stress, social, day
     story_text("Now the day of the test as come. Will you pass?", delay=0.05)
     story_text("[...]", delay=0.2)
@@ -411,7 +447,9 @@ def end():
     story_end()
 
 
+# Function for end of game and restart:
 def story_end():
+    debug("\n[story_end]\n")
     story_text("⭐️Do you want to try again?⭐️ (yes/no)", delay=0.05)
     choice = input("> ").strip().lower()
     if choice == "yes":
@@ -419,10 +457,14 @@ def story_end():
     else:
         story_text("Thanks for playing!", delay=0.05)
         sys.exit()
-        ##implement social and stress level to affect score
+
+
+# STRUCTURE OF GAME:
 def main():
     start()
     next_day()
     third_day()
     end()
+
+
 main()
