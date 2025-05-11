@@ -1,4 +1,5 @@
 # --- Game State ---
+#assignment 5
 inventory = []
 items_in_room = [
     {"name": "Torch", "type": "tool", "description": "Lights up dark places."},
