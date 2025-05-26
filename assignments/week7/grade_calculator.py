@@ -83,12 +83,16 @@ def calculate_average(data):
 
 # After the update let's save the data as a new csv file
 
-def write_csv(filename, data):
+def write_csv(filename, data, header):
+    week_columns = ["Week{}".format(i) for i in range(1, 14)]  #old format because systems' python apparently uses old version
+    header = ["Name", "Stream", "Email", "GitHub"] + week_columns + ["Total Score", "Average", "Grade"]
+
     with open(filename, 'w') as f:
-        f.write(",".join(["Name"] + header) + "\n")
-        for name, values in data.items():  # <-- 'data' must be accessible
-            row = ",".join([name] + [str(v) for v in values])
-            f.write(row + "\n")
+        f.write(",".join(header) + "\n")  # Write header row
+
+        for name, values in data.items():
+            row = [name] + [str(v) for v in values]
+            f.write(",".join(row) + "\n")
     pass
 
 # Bonus
@@ -114,7 +118,7 @@ if __name__ == "__main__":
     user_name = "[your_name]"
 
     newname = filename.split(".")[0] + "_calculated_by_" + user_name + ".csv"
-    write_csv(newname, data)
+    write_csv(newname, data, header)
     print("New file written:", newname)
 
     print_analysis()
