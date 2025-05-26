@@ -9,7 +9,7 @@ def read_csv(filename):
     # handle file exceptions here
     data = {}
     with open(filename) as f:
-        f.readline()  # Skip header
+        header = f.readline().strip().split(",")  # Read and store header
         for line in f:
             items = line.strip().split(",")  # Strip newline and split
             # Skip lines that have fewer than expected columns (e.g., less than 9)
@@ -34,7 +34,7 @@ def read_csv(filename):
                     weeks.append(0.0)
             # Combine everything
             data[name] = [stream, email, github] + weeks
-        return data
+        return data, header
     pass
 
 # Step 2
@@ -47,23 +47,45 @@ def populate_scores():
             values.extend(new_weeks)
     pass
 
-# Step 3
-def calculate_all():
-    # loop through all the students and calculate grades
-    pass
-
-def calculate_total(scores):
+def calculate_total():
     total = 0
+    for name, values in data.items():
+        weeks = values[3:]
+        top10 = sorted(weeks, reverse=True)[:10]
+        total = sum(top10)
+        values.append(total)
     return total
 
-def calculate_average(scores):
-    average =  0
+def calculate_grade(points, max_points=30, best=1.0, worst=5.0):
+    points = max(0, min(points, max_points))
+    grade = best + (worst - best) * (1 - (points / max_points))
+    return round(grade, 2)
+
+def calculate_all():
+    # loop through all the students and calculate grades
+    for name, values in data.items():
+        total_score = values[-2]
+        grade = calculate_grade(total_score)
+        values.append(grade)
+    return round(grade, 2)
+    pass
+
+
+
+def calculate_average(data):
+    for name, values in data.items():
+        average =  0
+        week_scores = values[3:-2]
+        valid_scores = [s for s in week_scores if isinstance(s, (int, float))]
+        average = sum(valid_scores) / len(valid_scores) if valid_scores else 0.0
+        values.append(round(average, 2))
     return average
 
 # After the update let's save the data as a new csv file
 
 def write_csv(filename, data):
     with open(filename, 'w') as f:
+        f.write(",".join(["Name"] + header) + "\n")
         for name, values in data.items():  # <-- 'data' must be accessible
             row = ",".join([name] + [str(v) for v in values])
             f.write(row + "\n")
@@ -80,10 +102,14 @@ if __name__ == "__main__":
 
     print("Open file:", filename)
 
-    data = read_csv(filename)
-
+    data, header = read_csv(filename)
     populate_scores()
+    calculate_total()
+    header.append("Total Score")
+    calculate_average(data)
+    header.append("Average Score")
     calculate_all()
+    header.append("Grade")
 
     user_name = "[your_name]"
 
