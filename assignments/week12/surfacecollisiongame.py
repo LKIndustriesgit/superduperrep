@@ -16,7 +16,7 @@ class Dino:
         self._img = pygame.transform.scale(pygame.image.load("../week12/dino_s.png"), (100,100))
         self._pos_x = pos_x
         self._pos_y = pos_y
-        self._speed = 1
+        self._speed = 2
 
     @property
     def pos_x(self):
@@ -54,6 +54,9 @@ font = pygame.font.Font(None, 100)
 dino = Dino()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+start_screen = pygame.Surface(screen.get_size())
+start_screen.fill("white")
+
 ground_rect = pygame.Rect(0, SCREEN_HEIGHT - 50, SCREEN_WIDTH, 50)
 floor_rect = pygame.Rect(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7 , SCREEN_WIDTH * 0.5, 50)
 floor2_rect = pygame.Rect(SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.56 , SCREEN_WIDTH * 0.2, 50)
@@ -63,10 +66,28 @@ winning_rect = pygame.Rect(SCREEN_WIDTH * 0.9, SCREEN_HEIGHT * 0.013 , SCREEN_WI
 ground_checker = pygame.Rect(dino.pos_x, dino.pos_y + dino._img.get_height() * 0.5, dino._img.get_width(), dino._img.get_height() * 0.5)
 pygame.display.set_caption('Jump and collide!')
 
+
+flag = False
+starting = True
+while starting:
+    pygame.draw.circle(start_screen, "aquamarine", (SCREEN_WIDTH / 2, SCREEN_HEIGHT *0.75), 40)
+    pygame.draw.circle(start_screen, "aquamarine", (SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25), 40)
+    screen.blit(start_screen, [0, 0])
+    text_surface = font.render("Press Enter to start", True, (0, 0, 0))
+    screen.blit(text_surface, (SCREEN_WIDTH // 2 - text_surface.get_width() // 2,
+                               SCREEN_HEIGHT // 2 - text_surface.get_height() // 2))
+    pygame.display.flip()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit(0)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                flag = True
+                starting = False
 clock = pygame.time.Clock()
 waiting = False
 event_start_time = 0
-flag = True
 while flag:
     screen.fill(BACKGROUND_COLOR)
     dino.draw()
